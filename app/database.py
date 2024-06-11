@@ -30,12 +30,12 @@ class DBResponse(NamedTuple):
     error: int
 
 class DatabaseHandler:
-    def __init__(self, db_path:path) -> None:
+    def __init__(self, db_path:Path) -> None:
         self.db_path = db_path
 
     def read_todos(self) -> DBResponse:
         try:
-            with self._db_path.open("r") as db:
+            with self.db_path.open("r") as db:
                 try:
                     return DBResponse(json.load(db), SUCCESS)
                 except json.JSONDecodeError:#catch wrong JSON format
@@ -45,7 +45,7 @@ class DatabaseHandler:
 
     def write_todos(self, todo_list: List[Dict[str, Any]]) -> DBResponse:
         try:
-            with self._db_path.open("w") as db:
+            with self.db_path.open("w") as db:
                 json.dump(todo_list, db, indent=4)
             return DBResponse(todo_list, SUCCESS)
         except OSError:#catch file IO problem
